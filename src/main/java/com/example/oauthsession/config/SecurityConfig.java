@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable());
         http
                 .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService)));
         http
