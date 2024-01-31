@@ -1,5 +1,6 @@
 package com.example.oauthsession.config;
 
+import com.example.oauthsession.oauth2.CustomClientRegistrationRepo;
 import com.example.oauthsession.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomClientRegistrationRepo customClientRegistrationRepo;
 
     @Autowired
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomClientRegistrationRepo customClientRegistrationRepo) {
         this.customOAuth2UserService = customOAuth2UserService;
+        this.customClientRegistrationRepo = customClientRegistrationRepo;
     }
 
     @Bean
@@ -32,6 +35,7 @@ public class SecurityConfig {
         http
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")
+                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService)));
         http
